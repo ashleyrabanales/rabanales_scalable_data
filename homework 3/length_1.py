@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1r6SCnxwcyRVfIRpiCnQroydZiP2U1Iob
 """
 #%%
-pip install pyspark
-#%%
 import re
 from pyspark import SparkConf, SparkContext
 
