@@ -1,3 +1,4 @@
+#%%
 from pyspark import SparkContext
 from pyspark import sql
 from pyspark.sql import SQLContext
@@ -6,7 +7,7 @@ import re
 
 sc = SparkContext()
 sqlContext = sql.SQLContext(sc)
-
+#%%
 #Loading Data from file
 dataRDD = sc.textFile("Amazon_Comments.csv").map(lambda x:x.split("^"))
 
@@ -15,10 +16,13 @@ dataRDDnew = dataRDD.map(lambda x:(x[0],x[1],x[2],x[3],x[4],x[5],x[6],len(re.sub
 
 #Loadning Data into SparkDataFrame
 dataDF = dataRDDnew.toDF(["ProductID","ReviewID", "ReviewTitle","ReviewTime","Verified","Review","Rating","Length"])
-
+#%%
 #####################################
 #Using Dataframe  SQL to find average length by Rating
 #Your Code Here
+# Loadning Data into SparkDataFrame
+dataDF.createOrReplaceTempView("reviews")
+results = sqlContext.sql("SELECT Rating, AVG(Length) as AvgLength FROM reviews GROUP BY Rating")
 
 
 #####################################
@@ -28,4 +32,6 @@ answer = sorted(results.collect())
 
 #Print Output
 for i in answer:
-	print str(i[0])+ " Star Rating: Average Length of Comments "+ str(i[1])
+	print(str(i[0])+ " Star Rating: Average Length of Comments "+ str(i[1]))
+
+# %%
